@@ -63,6 +63,9 @@
     @endif
 
     <div>
+    <section class="logo-slider">
+        @include('front.logoSlider')
+    </section>
 @endsection
 
 @section('footer')

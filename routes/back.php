@@ -141,6 +141,10 @@ Route::middleware('auth', 'isAdmin')->group(function () {
     // Slider
     Route::post('sliders/position', [SliderController::class, 'position'])->name('back.sliders.position');
     Route::get('sliders/delete/{slider}', [SliderController::class, 'destroy'])->name('back.sliders.delete');
+    Route::get('sliders/logo/index', [SliderController::class, 'getLogoForSlider'])->name('back.logo-slider.index');
+    Route::post('sliders/logo/store', [SliderController::class, 'storeLogoForSlider'])->name('back.logo-slider.store');
+    Route::post('sliders/logo/position', [SliderController::class, 'updateLogoPositionOfSlider'])->name('back.logo-slider.position');
+    Route::get('sliders/logo/{id}/delete', [SliderController::class, 'deleteSliderLogo'])->name('back.logo-slider.delete');
     Route::resource('sliders', SliderController::class, ['as' => 'back']);
     // Top Text Slider
     Route::post('text-sliders/edit-ajax', [TextSliderController::class, 'editAjax'])->name('back.text-sliders.editAjax');

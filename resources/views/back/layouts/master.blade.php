@@ -239,7 +239,7 @@
         {{-- <li><a href="{{route('back.products.reviews')}}" class="{{(request()->route()->getName() == 'back.products.reviews') ? 'active' : ''}}"><i class="fas fa-star-half-alt"></i> Product Reviews @if($reviews)<span class="badge badge-primary" style="background: red;color: yellow;">{{$reviews}}</span>@endif</a></li> --}}
 
         @php
-            $settings_route = Route::is('back.frontend.general') || Route::is('back.pages.index') || Route::is('back.pages.create') || Route::is('back.pages.edit') || Route::is('back.menus.index') || Route::is('back.sliders.index') || Route::is('back.sliders.edit') || Route::is('back.media.settings') || Route::is('back.feature-ads.index') || Route::is('back.feature-ads.edit') || Route::is('back.footerwidgets.index') || Route::is('back.footer-widgets.create') || Route::is('back.menus.category') || Route::is('back.text-sliders.index') || Route::is('back.footer-widgets.index');
+            $settings_route = Route::is('back.frontend.general') || Route::is('back.pages.index') || Route::is('back.pages.create') || Route::is('back.pages.edit') || Route::is('back.menus.index') || Route::is('back.sliders.index') || Route::is('back.sliders.edit') || Route::is('back.media.settings') || Route::is('back.feature-ads.index') || Route::is('back.feature-ads.edit') || Route::is('back.footerwidgets.index') || Route::is('back.footer-widgets.create') || Route::is('back.menus.category') || Route::is('back.text-sliders.index') || Route::is('back.footer-widgets.index') || Route::is('back.logo-slider.index');
         @endphp
         <li>
           <a href="" class="{{$settings_route ? 'active' : 'collapsed'}}" type="button" data-toggle="collapse" data-target="#collapse_frontend" aria-expanded="false"><i class="fas fa-cog"></i> Settings <i class="fas fa-chevron-right float-right text-right sub_menu_arrow"></i></a>
@@ -260,6 +260,7 @@
             {{-- <li class="{{(Route::is('back.feature-ads.index') || Route::is('back.feature-ads.edit')) ? 'active_sub_menu' : ''}}"><a href="{{route('back.feature-ads.index')}}"><i class="fas fa-circle"></i> Feature Ads</a></li> --}}
 
             <li class="{{(Route::is('back.footer-widgets.index')) ? 'active_sub_menu' : ''}}"><a href="{{route('back.footer-widgets.index')}}"><i class="fas fa-circle"></i> Footer Widgets</a></li>
+            <li class="{{(Route::is('back.logo-slider.index')) ? 'active_sub_menu' : ''}}"><a href="{{route('back.logo-slider.index')}}"><i class="fas fa-circle"></i> Logo Slider</a></li>
           </ul>
         </li>
         {{-- <li>

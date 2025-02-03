@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
+use App\Models\LogoSlider;
 use App\Models\Media;
 use App\Models\Slider;
 use App\Repositories\MediaRepo;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class SliderController extends Controller
 {
@@ -181,5 +183,56 @@ class SliderController extends Controller
         }
 
         return redirect()->back()->with('success-alert', 'Position updated successful.');
+    }
+
+    public function getLogoForSlider()
+    {
+        $sliders = LogoSlider::orderBy('position')->get();
+
+        return view('back.slider.logo-slider', compact('sliders'));
+    }
+
+    public function storeLogoForSlider(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,webp',
+        ]);
+
+        $file = $request->file('image');
+        $image_name = now()->format('dmY-His') . '-' . uniqid() . '.' .'webp';
+        $image = Image::make($file);
+        $quality = 90;
+        $image->encode('webp', $quality);
+        $image->resize(150, 150);
+        if (!file_exists(public_path('logos'))) {
+            mkdir(public_path('logos'), 0775, true);
+        }
+        $image->save(public_path('logos/' . $image_name));
+
+        LogoSlider::create([
+            'image' => $image_name,
+            'position' => 9999,
+        ]);
+
+        return redirect()->back()->with('success-alert', 'Logo Upload successful.');
+    }
+
+    public function updateLogoPositionOfSlider(Request $request)
+    {
+        foreach ($request->position as $i => $data) {
+            $query = LogoSlider::find($data);
+            $query->position = $i;
+            $query->save();
+        }
+
+        return redirect()->back()->with('success-alert', 'Position updated successful.');
+    }
+
+    public function deleteSliderLogo($id)
+    {
+        $slider = LogoSlider::find($id);
+        $slider->delete();
+
+        return redirect()->back()->with('success-alert', 'Logo deleted successfully.');
     }
 }
