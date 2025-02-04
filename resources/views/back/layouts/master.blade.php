@@ -291,20 +291,20 @@
           </a>
 
           <ul class="sub_ms collapse" id="collapse_manageSite" data-parent="#sidebar_accordion">
-              <li class="{{(request()->route()->getName() == 'back.smsSettings') ? 'active_sub_menu' : ''}}"><a href="{{route('back.smsSettings')}}"><i class="fas fa-circle"></i> SMS</a></li>
+              {{-- <li class="{{(request()->route()->getName() == 'back.smsSettings') ? 'active_sub_menu' : ''}}"><a href="{{route('back.smsSettings')}}"><i class="fas fa-circle"></i> SMS</a></li> --}}
               <li class="{{(request()->route()->getName() == 'back.courier.config') ? 'active_sub_menu' : ''}}"><a href="{{route('back.courier.config')}}"><i class="fas fa-circle"></i> Courier</a></li>
-              <li>
+              {{-- <li>
                   <a class="sub-link" href="{{ route('back.setting.social') }}">
                       <i class="fas fa-circle"></i><span class="sub-item">{{ __('Social Login') }}</span>
                   </a>
-              </li>
+              </li> --}}
                 <li>
                     <a class="sub-link" href="{{ route('back.setting.email') }}">
-                        <i class="fas fa-circle"></i><span class="sub-item">{{ __('Email Settings') }}</span>
+                        <i class="fas fa-circle"></i><span class="sub-item"> {{ __('Email Settings') }}</span>
                     </a>
                 </li>
               <li class="{{Route::is('admin.sitemap.index') ? 'active_sub_menu' : ''}}">
-                  <a href="{{ route('admin.sitemap.index') }}"><i class="fas fa-circle"></i>Sitemap</a>
+                  <a href="{{ route('admin.sitemap.index') }}"><i class="fas fa-circle"></i> Sitemap</a>
               </li>
           </ul>
       </li>
