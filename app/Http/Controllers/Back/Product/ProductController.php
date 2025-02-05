@@ -148,6 +148,8 @@ class ProductController extends Controller
         $product->stock_pre_alert_quantity = $request->stock_pre_alert_quantity ?? 0;
         $product->custom_label = $request->custom_label;
         $product->nutrition = $request->nutrition;
+        $product->delivery = $request->delivery;
+        $product->warranty = $request->warranty;
 
         // Product media relation
         if ($request->file('image')) {
@@ -423,6 +425,8 @@ class ProductController extends Controller
         $product->stock_pre_alert_quantity = $request->stock_pre_alert_quantity ?? 0;
         $product->custom_label = $request->custom_label;
         $product->nutrition = $request->nutrition;
+        $product->delivery = $request->delivery;
+        $product->warranty = $request->warranty;
 
         // Product media relation
         if ($request->file('image')) {

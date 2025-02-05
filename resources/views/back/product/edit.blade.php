@@ -48,6 +48,18 @@
                                 <input type="text" class="form-control form-control-sm" name="title" value="{{old('title') ?? $product->title}}" required>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><b>Product Delivery(In Days)</b></label>
+                                <input type="number" class="form-control form-control-sm" name="delivery" value="{{old('delivery') ?? $product->delivery}}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><b>Product Warranty</b></label>
+                                <input type="text" class="form-control form-control-sm" name="warranty" value="{{old('warranty') ?? $product->warranty}}" required>
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label><b>Short Description</b></label>

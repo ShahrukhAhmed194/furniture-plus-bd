@@ -21,7 +21,7 @@ class Product extends Model
         'status', 'title', 'slug', 'type', 'featured', 'clearance_sale', 'spacial_offer', 'short_description',
         'description', 'nutrition', 'brand_id', 'meta_title', 'meta_description', 'meta_tags', 'position', 'image', 
         'image_path', 'media_id', 'stock', 'stock_alert_quantity', 'stock_pre_alert_quantity', 'custom_label', 'view',
-        'average_rating', 'total_review', 'expire_date', 'sale_price', 'regular_price', 'attribute_items_id',
+        'average_rating', 'total_review', 'expire_date', 'sale_price', 'regular_price', 'attribute_items_id', 'delivery', 'warranty'
     ];
 
     public function sluggable(): array

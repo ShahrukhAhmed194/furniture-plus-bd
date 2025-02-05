@@ -174,7 +174,11 @@
                                     <img src="https://cdn-icons-png.flaticon.com/512/66/66841.png" alt="delivery icon" loading="lazy" class="w-12">
                                 </div>
                                 <div>
-                                    <p class="text-xl">Fast Delivery</p>
+                                    @if ($product->delivery)
+                                        <p class="text-lg">Delivery In {{$product->delivery}} Working Day(s)</p>
+                                    @else
+                                        <p class="text-lg">Fast Delivery</p>
+                                    @endif
                                 </div>
                             </div>
                             <div class="flex items-center justify-center gap-3 px-3 rounded">
@@ -182,7 +186,15 @@
                                     <img src="https://media.istockphoto.com/id/1360644683/vector/24-hour-icon-rotating-arrow-vector.jpg?s=612x612&w=0&k=20&c=frnqCBtIDuBFwRUyp0BcYQlOIStT7voGzpL6KbIvm0I=" alt="delivery icon" loading="lazy" class="w-12">
                                 </div>
                                 <div>
-                                    <p class="text-xl">24/7 Customer Service</p>
+                                    <p class="text-lg">24/7 Customer Service</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-center gap-3 px-3 rounded">
+                                <div>
+                                    <img src="{{asset('img/warranty.png')}}" alt="delivery icon" loading="lazy" class="w-12">
+                                </div>
+                                <div>
+                                    <p class="text-lg">{{$product->warranty ?? 'No' }} Warranty</p>
                                 </div>
                             </div>
                         </div>
