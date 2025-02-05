@@ -205,7 +205,7 @@ class SliderController extends Controller
         $image->encode('webp', $quality);
         $image->resize(150, 150);
         if (!file_exists(public_path('logos'))) {
-            mkdir(public_path('logos'), 0775, true);
+            mkdir(public_path('logos'), 777, true);
         }
         $image->save(public_path('logos/' . $image_name));
 
