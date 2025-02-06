@@ -195,15 +195,14 @@ class SliderController extends Controller
     public function storeLogoForSlider(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,webp',
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,webp|max:2048',
         ]);
 
         $file = $request->file('image');
-        $image_name = now()->format('dmY-His') . '-' . uniqid() . '.' .'webp';
+        $extension = $file->getClientOriginalExtension();
+        $image_name = now()->format('dmY-His') . '-' . uniqid() . '.' .$extension;
         $image = Image::make($file);
-        $quality = 90;
-        $image->encode('webp', $quality);
-        $image->resize(150, 150);
+       
         if (!file_exists(public_path('logos'))) {
             mkdir(public_path('logos'), 777, true);
         }
