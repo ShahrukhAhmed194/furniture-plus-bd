@@ -168,35 +168,35 @@
                                 </button>
                             </div>
                         </form>
-                        <div class="flex items-center flex-col md:flex-row gap-3 mt-5">
-                            <div class="flex items-center justify-center gap-3 px-3 rounded">
+                        <div class="flex items-center gap-1 md:gap-3 mt-5 justify-start md:justify-start w-[80%]">
+                            <div class="inline-flex items-center justify-start gap-1 rounded flex-1">
                                 <div>
                                     <img src="https://cdn-icons-png.flaticon.com/512/66/66841.png" alt="delivery icon" loading="lazy" class="w-12">
                                 </div>
                                 <div>
                                     @if ($product->delivery)
-                                        <p class="text-lg">Delivery In {{$product->delivery}} Working Day(s)</p>
+                                        <p class="text-lg whitespace-normal">Delivery In {{$product->delivery}} Working Day(s)</p>
                                     @else
-                                        <p class="text-lg">Fast Delivery</p>
+                                        <p class="text-lg whitespace-normal">Fast Delivery</p>
                                     @endif
                                 </div>
                             </div>
-                            <div class="flex items-center justify-center gap-3 px-3 rounded">
+                            <div class="inline-flex items-center justify-start gap-1 rounded flex-1">
                                 <div>
                                     <img src="https://media.istockphoto.com/id/1360644683/vector/24-hour-icon-rotating-arrow-vector.jpg?s=612x612&w=0&k=20&c=frnqCBtIDuBFwRUyp0BcYQlOIStT7voGzpL6KbIvm0I=" alt="delivery icon" loading="lazy" class="w-12">
                                 </div>
                                 <div>
-                                    <p class="text-lg">24/7 Customer Service</p>
+                                    <p class="text-lg whitespace-normal">24/7 Customer Service</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="flex items-center flex-col md:flex-row gap-3 mt-5">
-                            <a href="https://api.whatsapp.com/send?phone={{ $settings_g['whatsapp_number'] }}&amp;text={{ Request::url() }}&amp;" class="flex items-center justify-center gap-3 px-3 rounded gap-2 text-lg font-bold border hover:shadow-lg">
+                        <div class="flex items-center gap-1 md:gap-3 mt-5 justify-start md:justify-start w-[80%]">
+                            <a href="https://api.whatsapp.com/send?phone={{ $settings_g['whatsapp_number'] }}&amp;text={{ Request::url() }}&amp;" class="inline-flex items-center justify-start gap-1 rounded flex-1 gap-2 text-lg font-bold border hover:shadow-lg">
                                 <img src="https://pngimg.com/d/whatsapp_PNG21.png" alt="whatsapp" class="w-[30px]">
                                 <span class="text-sm">WhatsApp</span>
                             </a>
-                            <span class="flex items-center justify-center gap-3 px-3 rounded gap-2 text-lg font-bold border hover:shadow-lg">
+                            <span class="inline-flex items-center justify-start gap-1 rounded flex-1 rounded gap-2 text-lg font-bold border hover:shadow-lg ml-3">
                                 <img src="{{asset('img/warranty.png')}}" alt="delivery icon" loading="lazy" class="w-[30px]">
                                 <span class="text-sm">{{$product->warranty ?? 'No' }} Warranty</span>
                             </span>
