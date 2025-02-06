@@ -189,21 +189,17 @@
                                     <p class="text-lg">24/7 Customer Service</p>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-center gap-3 px-3 rounded">
-                                <div>
-                                    <img src="{{asset('img/warranty.png')}}" alt="delivery icon" loading="lazy" class="w-12">
-                                </div>
-                                <div>
-                                    <p class="text-lg">{{$product->warranty ?? 'No' }} Warranty</p>
-                                </div>
-                            </div>
                         </div>
 
-                        <div class="mt-5 flex items-center">
-                            <a href="https://api.whatsapp.com/send?phone={{ $settings_g['whatsapp_number'] }}&amp;text={{ Request::url() }}&amp;" class="flex items-center gap-2 text-lg font-bold border px-3 py-1 rounded-lg transition-all hover:shadow-lg">
+                        <div class="flex items-center flex-col md:flex-row gap-3 mt-5">
+                            <a href="https://api.whatsapp.com/send?phone={{ $settings_g['whatsapp_number'] }}&amp;text={{ Request::url() }}&amp;" class="flex items-center justify-center gap-3 px-3 rounded gap-2 text-lg font-bold border hover:shadow-lg">
                                 <img src="https://pngimg.com/d/whatsapp_PNG21.png" alt="whatsapp" class="w-[30px]">
                                 <span class="text-sm">WhatsApp</span>
                             </a>
+                            <span class="flex items-center justify-center gap-3 px-3 rounded gap-2 text-lg font-bold border hover:shadow-lg">
+                                <img src="{{asset('img/warranty.png')}}" alt="delivery icon" loading="lazy" class="w-[30px]">
+                                <span class="text-sm">{{$product->warranty ?? 'No' }} Warranty</span>
+                            </span>
                         </div>
                     </div>
                 </div>
