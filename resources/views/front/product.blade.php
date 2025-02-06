@@ -56,6 +56,15 @@
             }
         }
 
+        #product_preview2 {
+            transition: transform 0.3s ease;
+            cursor: zoom-in;
+        }
+
+        #product_preview2:hover {
+            transform: scale(1.5);
+            transform-origin: center center;
+        }
     </style>
 @endsection
 @php
@@ -412,6 +421,33 @@
 @endsection
 
 @section('footer')
+<script>
+    const productPreview = document.getElementById('product_preview2');
+    const productContainer = productPreview.closest('.border'); // Get the container of the image
+
+    productContainer.addEventListener('mouseenter', () => {
+    productPreview.style.transition = 'transform 0.3s ease';
+    productPreview.style.transform = 'scale(1.5)';
+    });
+
+    productContainer.addEventListener('mousemove', (e) => {
+    const { left, top, width, height } = productContainer.getBoundingClientRect();
+    const x = e.clientX - left;
+    const y = e.clientY - top;
+    
+    const xPercent = (x / width) * 250;
+    const yPercent = (y / height) * 250;
+    
+    productPreview.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+    });
+
+    productContainer.addEventListener('mouseleave', () => {
+    productPreview.style.transition = 'transform 0.3s ease';
+    productPreview.style.transform = 'scale(1)';
+    });
+
+
+</script>
     <script src="{{asset('front/OwlCarousel/dist/owl.carousel.min.js')}}"></script>
 
     <script src="{{asset('front/magiczoomplus.js')}}?c=1"></script>
