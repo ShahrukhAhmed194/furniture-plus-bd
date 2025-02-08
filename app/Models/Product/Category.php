@@ -84,6 +84,6 @@ class Category extends Model
     }
 
     public function Products(){
-        return $this->belongsToMany(Product::class, 'product_categories')->where('status', 1);
+        return $this->belongsToMany(Product::class, 'product_categories')->orderBy('position');
     }
 }

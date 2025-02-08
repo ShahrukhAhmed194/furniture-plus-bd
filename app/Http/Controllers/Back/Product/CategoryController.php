@@ -37,7 +37,6 @@ class CategoryController extends Controller
 
     public function categoryPositonUpdate(Request $request)
     {
-        // dd($request->all());
         foreach ($request->position as $index => $id) {
 
             $category = Category::find($id);
@@ -49,6 +48,52 @@ class CategoryController extends Controller
         }
 
         return redirect()->back()->with('success-alert', 'Position and status updated successfully.');
+    }
+
+    public function productsOfACategory(Request $request)
+    {
+        if (!$request->category_id) {
+            return response()->json(['success' => false, 'message' => 'Category ID is required'], 400);
+        }
+
+        $category = Category::with('products')->find($request->category_id);
+
+        if (!$category) {
+            return response()->json(['success' => false, 'message' => 'Category not found'], 404);
+        }
+
+        $products = $category->products->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'type' => $item->type,
+                'stock' => $item->stock,
+                'status' => $item->status,
+                'image' => $item->img_paths['small'] ?? null,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'products' => $products
+        ]);
+    }
+
+
+    public function categoryProductPositonUpdate(Request $request)
+    {
+        foreach ($request->position as $index => $id) {
+
+            $category = Product::find($id);
+            if ($category) {
+                $category->position = $index;
+                $category->status = $request->has("status_$id") ? 1 : 0;
+                $category->save();
+            }
+        }
+
+        return redirect()->back()->with('success-alert', 'Position and status updated successfully.');
+
     }
 
     /**

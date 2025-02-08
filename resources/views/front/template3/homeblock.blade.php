@@ -18,7 +18,7 @@
                 <p class="max-w-[600px] text-neutral-500">{{ $home_block->short_description }}</p>
             </div>
             @php
-                $products = $home_block->Products()->latest('id')->take(5)->get();
+                $products = $home_block->Products()->latest('id')->orderBy('position')->take(5)->get();
             @endphp
             <div class="mt-5">
                 {{--<div class="owl-carousel_normal owl-carousel owl-theme mb-6 h-100">

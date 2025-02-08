@@ -65,16 +65,15 @@
 
 @section('master')
 <div class="row">
-    <div class="col-md-3"></div>
     <div class="col-md-6">
-        <form id="updatePositionForm" action="{{ route('back.categories.position.update') }}" method="post">
+        <form id="updateCategoryPositionForm" action="{{ route('back.categories.position.update') }}" method="post">
             @csrf
             <div class="card border-light mt-3 shadow">
                 <div class="card-body">
                     <table class="table table-bordered table-hover" id="dataTable">
                         <thead class="table-dark">
                           <tr>
-                            <th scope="col">Title</th>
+                            <th scope="col">Category</th>
                             <th scope="col">Status</th>
                             <th scope="col">Short Description</th>
                             <th scope="col">Action</th>
@@ -93,7 +92,9 @@
                                 </td>
                                 <td>{{$category->short_description}}</td>
                                 <td>
-                                    <a class="btn btn-success btn-sm" href="{{route('back.categories.edit', $category->id)}}"><i class="fas fa-edit"></i></a>
+                                    <span class="btn btn-success btn-sm" onclick="getProductForThisCategory({{$category->id}})">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
                                 </td>
                             </tr>
                             @endforeach
@@ -101,12 +102,38 @@
                     </table>
                 </div>
                 <div class="card-footer item-end">
-                    <button type="submit" id="savePosition" class="btn btn-success">Update Position</button>
+                    <button type="submit" class="btn btn-success w-100">Update Category Position</button>
                 </div>
             </div>
         </form>
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <form id="updateProductPositionForm" action="{{ route('back.catagory.product.position.update') }}" method="post">
+            @csrf
+            <div class="card border-light mt-3 shadow">
+                <div class="card-body">
+                    <table class="table table-bordered table-hover" id="dataTable">
+                        <thead class="table-dark">
+                          <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Stock</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Image</th>
+                          </tr>
+                        </thead>
+                        <tbody class="moveContent product_table">
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer item-end">
+                    <button type="submit" id="savePosition" class="btn btn-success w-100 d-none">Update Product Position</button>
+                </div>                
+            </div>
+        </form>
+    </div>
+
 </div>
 @endsection
 
@@ -123,5 +150,37 @@
                 }
             });
         });
+
+        function getProductForThisCategory(category_id)
+        {
+            $.ajax({
+                url: "{{ route('back.category.products') }}",
+                type: "GET",
+                data: { category_id: category_id },
+                success: function(response) {
+                    console.log(response);
+                    let tableBody = $(".product_table");
+                    tableBody.empty();
+                    response.products.forEach(product => {
+                        tableBody.append(`
+                            <tr data-id="${product.id}">
+                                <td>${product.title}</td>
+                                <td>${product.type}</td>
+                                <td>${product.stock}</td>
+                                <td>
+                                    <input type="hidden" name="position[]" value="${product.id}">
+                                    <label class="switch">
+                                        <input type="checkbox" class="status-toggle" data-id="${product.id}" name="status_${product.id}" ${product.status == 1 ? 'checked' : ''}>
+                                        <span class="slider"></span>
+                                    </label>
+                                </td>
+                                <td><img src="${product.image}" style="width:35px"></td>
+                            </tr>
+                        `);
+                    });
+                    $('#savePosition').removeClass('d-none');
+                }
+            });
+        }
     </script>
 @endsection
