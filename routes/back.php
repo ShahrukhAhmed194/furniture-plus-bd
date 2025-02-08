@@ -186,6 +186,8 @@ Route::middleware('auth', 'isAdmin')->group(function () {
         Route::post('categories/change-product-category', [CategoryController::class, 'changeProductCategory'])->name('back.categories.changeProductCategory');
         Route::get('categories/remove-product/{product}/{category}', [CategoryController::class, 'removeProduct'])->name('back.categories.removeProduct');
         Route::get('categories/remove-image/{category}', [CategoryController::class, 'removeImage'])->name('back.categories.removeImage');
+        Route::get('categories/positon', [CategoryController::class, 'categoryPositon'])->name('back.categories.position');
+        Route::post('categories/positon/update', [CategoryController::class, 'categoryPositonUpdate'])->name('back.categories.position.update');
         Route::resource('categories', CategoryController::class, ['as' => 'back']);
 
         // Brand CRUD

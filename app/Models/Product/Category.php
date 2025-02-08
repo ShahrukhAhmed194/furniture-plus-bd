@@ -15,7 +15,7 @@ class Category extends Model
     use Sluggable;
 
     protected $fillable = [
-        'slug'
+        'slug', 'feature_position'
     ];
 
     public function sluggable(): array

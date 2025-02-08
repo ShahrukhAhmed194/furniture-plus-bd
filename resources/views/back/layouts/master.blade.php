@@ -181,7 +181,20 @@
           @endif
 
         {{-- <li class="{{(request()->route()->getName() == 'back.stocks.index') ? 'active' : ''}}"><a href="{{route('back.stocks.index')}}"><i class="fas fa-layer-group"></i> Product Stock</a></li> --}}
-        <li class="{{(Route::is('back.categories.index') || Route::is('back.categories.create') || Route::is('back.categories.edit')) ? 'active' : ''}}"><a href="{{route('back.categories.index')}}"><i class="fas fa-list"></i> Categories</a></li>
+        <li>
+          <a href="#" class="{{(Route::is('back.categories.index') || Route::is('back.categories.create') || Route::is('back.categories.edit') || Route::is('back.categories.position')) ? 'active' : ''}}" type="button" data-toggle="collapse" data-target="#collapse_categories" aria-expanded="false">
+              <i class="fas fa-list"></i> Categories <i class="fas fa-chevron-right float-right text-right sub_menu_arrow"></i>
+          </a>
+
+          <ul class="sub_ms collapse {{(Route::is('back.categories.index') || Route::is('back.categories.position')) ? 'show' : ''}}" id="collapse_categories" data-parent="#sidebar_accordion">
+              <li class="{{Route::is('back.categories.index') ? 'active_sub_menu' : ''}}">
+                  <a href="{{route('back.categories.index')}}"><i class="fas fa-circle"></i> List </a>
+              </li>
+              <li class="{{Route::is('back.categories.position') ? 'active_sub_menu' : ''}}">
+                  <a href="{{route('back.categories.position')}}"><i class="fas fa-circle"></i> Position</a>
+              </li>
+          </ul>
+        </li>
         <li class="{{(Route::is('back.brands.index') || Route::is('back.brands.create') || Route::is('back.brands.edit')) ? 'active' : ''}}"><a href="{{route('back.brands.index')}}"><i class="fas fa-tag"></i> Brand</a></li>
 
         {{-- <li class="{{(Route::is('back.testimonials.index') || Route::is('back.testimonials.create') || Route::is('back.testimonials.edit')) ? 'active' : ''}}"><a href="{{route('back.testimonials.index')}}"><i class="fas fa-check"></i> Testimonial</a></li> --}}

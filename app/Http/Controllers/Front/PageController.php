@@ -48,7 +48,7 @@ class PageController extends Controller
             return Slider::active()->get();
         });
 
-        $home_blocks = Category::where('for', 'product')->where('home_block', 1)->active()->paginate(5);
+        $home_blocks = Category::where('for', 'product')->where('home_block', 1)->orderBy('feature_position', 'ASC')->active()->paginate(5);
 
         return view('front.homepage', compact('products', 'categories', 'hot_deals', 'sliders', 'home_blocks'));
     }
@@ -56,7 +56,7 @@ class PageController extends Controller
     public function homeBlocks(Request $request)
     {
         $itemsPerPage = request('per_page') ?? 5;
-        $home_blocks = Category::where('for', 'product')->where('home_block', 1)->active()->paginate($itemsPerPage);
+        $home_blocks = Category::where('for', 'product')->where('home_block', 1)->orderBy('feature_position', 'ASC')->active()->paginate(5);
         $template = Info::settings('general','template');
         if (isset($template) && $template == 2) return view('front.template2.homeblock',compact('home_blocks'))->render();
         else if (isset($template) && $template == 3) return view('front.template3.homeblock',compact('home_blocks'))->render();

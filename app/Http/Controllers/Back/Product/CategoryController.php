@@ -23,9 +23,32 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::with('Categories', 'Categories.Categories')->withCount('Products')->where('category_id', null)->where('for', 'product')->orderBy('title')->get();
-
+        $categories = Category::with('Categories', 'Categories.Categories')->withCount('Products')->where('category_id', null)->where('for', 'product')->orderBy('feature_position')->get();
+        
         return view('back.product.category.index', compact('categories'));
+    }
+
+    public function categoryPositon()
+    {
+        $categories = Category::where('for', 'product')->where('home_block', 1)->orderBy('feature_position', 'ASC')->get();
+
+        return view('back.product.category.position', compact('categories'));
+    }
+
+    public function categoryPositonUpdate(Request $request)
+    {
+        // dd($request->all());
+        foreach ($request->position as $index => $id) {
+
+            $category = Category::find($id);
+            if ($category) {
+                $category->feature_position = $index;
+                $category->status = $request->has("status_$id") ? 1 : 0;
+                $category->save();
+            }
+        }
+
+        return redirect()->back()->with('success-alert', 'Position and status updated successfully.');
     }
 
     /**
