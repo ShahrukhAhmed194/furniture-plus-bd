@@ -9,6 +9,10 @@ class Review extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'product_id' , 'user_id', 'review', 'rating' 
+    ];
+    
     // Active
     public function scopeActive($q, $take = null){
         $q->where('status', 1);

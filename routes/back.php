@@ -205,6 +205,7 @@ Route::middleware('auth', 'isAdmin')->group(function () {
         Route::get('products/reviews-action/{review}/{action}', [ProductController::class, 'reviewAction'])->name('back.products.reviewAction');
         Route::get('products/reviews-action/{review}', [ProductController::class, 'reviewDelete'])->name('back.products.reviewDelete');
         Route::post('products/change-featured', [ProductController::class, 'changeFeatured'])->name('back.products.changeFeatured');
+        Route::post('products/review/user', [ProductController::class, 'addUserProductReview'])->name('back.add.reviews');
         Route::resource('products', ProductController::class, ['as' => 'back']);
 
         // Attribute CRUD

@@ -838,4 +838,22 @@ class ProductController extends Controller
         }
         return 'error';
     }
+
+    public function addUserProductReview(Request $request)
+    {
+        $request->validate([
+            'review' => 'required|string|min:2|max:1000',
+            'rating' => 'required|integer|min:1|max:5',
+            'product_id' => 'required|integer',
+        ]);
+
+        Review::create([
+            'product_id' => $request->product_id,
+            'user_id' => auth()->id(),
+            'review' => $request->review,
+            'rating' => $request->rating,
+        ]);
+    
+        return redirect()->back()->with('success', 'Review submitted successfully!');
+    }
 }

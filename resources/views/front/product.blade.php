@@ -70,6 +70,13 @@
 @php
     $template = 0;
     if(isset($settings_g['template'])) $template = $settings_g['template'];
+    $rating = 0;
+    foreach($product->review as $review){
+        $rating +=$review->rating;
+    }
+    $average = $product->review->count() > 0 ? $rating / $product->review->count() : 0;
+    $rest = 5 - round($average);
+ 
 @endphp
 @section('master')
 <div class="{{ $container }}">
@@ -237,53 +244,143 @@
                 </div>
                 <div class="hidden p-4 rounded-lg" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                     <div>
-                        <div class="justify-center text-center px-2 py-5">
+                        <div class="justify-center px-2 text-center">
+                            @if (Auth::check())
+                            <div class="max-w-md mx-auto">
+                                <form id="reviewForm" action="{{Route('back.add.reviews')}}" method="POST">
+                                    @csrf
+                                    @if ($errors->any())
+                                        <div class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+                                    <!-- Textarea -->
+                                    <div class="mb-4">
+                                        <label for="review" class="block mb-2 text-sm font-medium text-gray-700">
+                                            Your Review
+                                        </label>
+                                        <textarea id="review" name="review" rows="4"
+                                            class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Write your review here..."></textarea>
+                                    </div>
+                            
+                                    <div class="mt-5 my-5">
+                                        <p>Your Rating</p>
+                                        <div class="flex space-x-1">
+                                            <input type="hidden" id="rating" name="rating" value="0">
+                                            <svg class="w-6 h-6 text-gray-300 cursor-pointer star" data-value="1" fill="currentColor"
+                                                viewBox="0 0 22 20">
+                                                <path
+                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                            </svg>
+                                            <svg class="w-6 h-6 text-gray-300 cursor-pointer star" data-value="2" fill="currentColor"
+                                                viewBox="0 0 22 20">
+                                                <path
+                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                            </svg>
+                                            <svg class="w-6 h-6 text-gray-300 cursor-pointer star" data-value="3" fill="currentColor"
+                                                viewBox="0 0 22 20">
+                                                <path
+                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                            </svg>
+                                            <svg class="w-6 h-6 text-gray-300 cursor-pointer star" data-value="4" fill="currentColor"
+                                                viewBox="0 0 22 20">
+                                                <path
+                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                            </svg>
+                                            <svg class="w-6 h-6 text-gray-300 cursor-pointer star" data-value="5" fill="currentColor"
+                                                viewBox="0 0 22 20">
+                                                <path
+                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" name="product_id" value="{{$product->id}}">
+                            
+                                    <!-- Submit Button -->
+                                    <div id="reviewSubmit">
+                                        <button type="submit"
+                                            class="px-4 py-2 text-white bg-blue-500 rounded-lg w-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            @else
+                                <p>You are not logged in. Please log in to give review</p>
+                            @endif
+                        </div>
+
+                        <div class="justify-center px-2 py-5 text-center">
                             <h1 class="justify-center text-center">Customer Reviews</h1>
                             <div class="justify-center text-center">
                                 <div class="flex items-center justify-center">
                                     <div class="flex items-center">
-                                        <svg class="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                        </svg>
-                                        <svg class="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                        </svg>
-                                        <svg class="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                        </svg>
-                                        <svg class="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                        </svg>
-                                        <svg class="w-4 h-4 text-gray-300 me-1 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                        </svg>
-                                        <p class="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400">{{ $product->average_rating }}</p>
-                                        <p class="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400">out of</p>
-                                        <p class="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400">5</p>
+
+                                        @for( $i = 1; $i <= $average; $i++)
+                                            <i class="text-yellow-500 star fa-solid fa-star"></i>
+                                        @endfor
+
+                                        @for( $i = 1; $i <= $rest ; $i++)
+                                            <i class="text-gray-500 star fa-solid fa-star"></i>
+                                         @endfor
+
+                                         @if( ceil($average) == 0)
+                                            <p>No review submitted</p>
+                                         @else
+                                        <p class="text-sm font-medium text-gray-500 ms-1 dark:text-gray-400">
+                                            {{    ceil($average)  }}</p>
+                                        <p class="text-sm font-medium text-gray-500 ms-1 dark:text-gray-400">out of</p>
+                                        <p class="text-sm font-medium text-gray-500 ms-1 dark:text-gray-400"> 5</p>
+                                        @endif
                                     </div>
                                     <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
-                                    <a href="#" class="text-sm font-medium text-gray-900 underline hover:no-underline">{{ $product->total_review }} reviews</a>
+
+                                    <a href="#"
+                                        class="text-sm font-medium text-gray-900 underline hover:no-underline">{{ $product->review->count() }}
+                                        reviews</a>
                                 </div>
                             </div>
                         </div>
-                        @foreach($product->review as $review)
+
+                        @foreach ($product->review as $review)
                             <div>
-                                <figure class="max-w-screen border px-2 py-2">
-                                    <div class="flex items-center mb-4 text-yellow-300">
-                                        <svg class="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                <figure class="px-2 py-2 border max-w-screen">
+                                    <div class="flex items-center mb-4">
+                                        <svg class="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor" viewBox="0 0 22 20">
+                                            <path
+                                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
                                         </svg>
-                                        <svg class="w-5 h-5 me-1 {{ $review->rating > 1 ?'':'text-gray-300' }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        <svg class="w-5 h-5 me-1 {{ $review->rating > 1 ? '' : 'text-gray-300' }}"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                            viewBox="0 0 22 20">
+                                            <path
+                                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
                                         </svg>
-                                        <svg class="w-5 h-5 me-1 {{ $review->rating > 2 ?'':'text-gray-300' }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        <svg class="w-5 h-5 me-1 {{ $review->rating > 2 ? '' : 'text-gray-300' }}"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                            viewBox="0 0 22 20">
+                                            <path
+                                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
                                         </svg>
-                                        <svg class="w-5 h-5 me-1 {{ $review->rating > 3 ?'':'text-gray-300' }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        <svg class="w-5 h-5 me-1 {{ $review->rating > 3 ? '' : 'text-gray-300' }}"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                            viewBox="0 0 22 20">
+                                            <path
+                                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
                                         </svg>
-                                        <svg class="w-4 h-4 ms-1 {{ $review->rating > 4 ?'':'text-gray-300' }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        <svg class="w-4 h-4 ms-1 {{ $review->rating > 4 ? '' : 'text-gray-300' }}"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                            viewBox="0 0 22 20">
+                                            <path
+                                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
                                         </svg>
                                     </div>
                                     <blockquote>
@@ -292,15 +389,17 @@
                                         </p>
                                     </blockquote>
                                     <figcaption class="flex items-center mt-6 space-x-3 rtl:space-x-reverse">
-                                        <img class="w-6 h-6 rounded-full" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png" alt="profile picture">
-                                        <div class="flex items-center divide-x-2 rtl:divide-x-reverse divide-gray-300 dark:divide-gray-700">
-                                            <cite class="pe-3 font-medium text-gray-900">{{ $review->name }}</cite>
+                                        <img class="w-6 h-6 rounded-full"
+                                            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
+                                            alt="profile picture">
+                                        <div
+                                            class="flex items-center divide-x-2 divide-gray-300 rtl:divide-x-reverse dark:divide-gray-700">
+                                            <cite class="font-medium text-gray-900 pe-3">{{ $review->name }}</cite>
                                         </div>
                                     </figcaption>
                                 </figure>
                             </div>
                         @endforeach
-
                     </div>
                 </div>
             </div>
@@ -426,27 +525,42 @@
     const productContainer = productPreview.closest('.border'); // Get the container of the image
 
     productContainer.addEventListener('mouseenter', () => {
-    productPreview.style.transition = 'transform 0.3s ease';
-    productPreview.style.transform = 'scale(1.5)';
+        productPreview.style.transition = 'transform 0.3s ease';
+        productPreview.style.transform = 'scale(1.5)';
     });
 
     productContainer.addEventListener('mousemove', (e) => {
-    const { left, top, width, height } = productContainer.getBoundingClientRect();
-    const x = e.clientX - left;
-    const y = e.clientY - top;
-    
-    const xPercent = (x / width) * 250;
-    const yPercent = (y / height) * 250;
-    
-    productPreview.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+        const { left, top, width, height } = productContainer.getBoundingClientRect();
+        const x = e.clientX - left;
+        const y = e.clientY - top;
+        
+        const xPercent = (x / width) * 250;
+        const yPercent = (y / height) * 250;
+        
+        productPreview.style.transformOrigin = `${xPercent}% ${yPercent}%`;
     });
 
     productContainer.addEventListener('mouseleave', () => {
-    productPreview.style.transition = 'transform 0.3s ease';
-    productPreview.style.transform = 'scale(1)';
+        productPreview.style.transition = 'transform 0.3s ease';
+        productPreview.style.transform = 'scale(1)';
     });
 
+    document.addEventListener("DOMContentLoaded", function () {
+        const stars = document.querySelectorAll(".star");
+        const ratingInput = document.getElementById("rating");
 
+        stars.forEach(star => {
+            star.addEventListener("click", function () {
+                const value = this.getAttribute("data-value");
+                ratingInput.value = value;
+
+                stars.forEach(s => s.classList.remove("text-yellow-500"));
+                for (let i = 0; i < value; i++) {
+                    stars[i].classList.add("text-yellow-500");
+                }
+            });
+        });
+    });
 </script>
     <script src="{{asset('front/OwlCarousel/dist/owl.carousel.min.js')}}"></script>
 
