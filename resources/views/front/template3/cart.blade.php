@@ -145,8 +145,12 @@
             </div>
 
             <div class="mt-6">
-                <button type="submit" class="text-center rounded-md border-2 border-primary bg-primary px-6 py-2 text-base font-medium text-font-color-light shadow-sm hover:bg-white hover:text-primary block w-full text-white">Confirm Order</button>
+                <button type="submit" class="text-center rounded-md border-1 border-primary bg-primary px-6 py-2 text-base font-medium text-font-color-light shadow-sm hover:ring-1 hover:ring-teal-500 hover:text-yellow-500 hover:bg-white block w-full text-white">
+                    Confirm Order
+                </button>
             </div>
+            
+            
         </div>
     </div>
 
