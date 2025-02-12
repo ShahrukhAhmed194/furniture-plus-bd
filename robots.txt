@@ -1,2 +1,6 @@
 user-agent: * 
 Disallow:
+
+Sitemap: https://foodsupplementsbd.com/assets/sitemaps/sitemap679d0e51215d1.xml
+Sitemap: https://foodsupplementsbd.com//assets/sitemaps/sitemap66e8781774eac.xml
+Sitemap: https://foodsupplementsbd.com/assets/sitemaps/sitemap66db012680866.xml
