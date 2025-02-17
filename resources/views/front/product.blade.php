@@ -171,16 +171,16 @@
                                 </button>
                             </div>
                             <div class="flex items-center gap-1 md:gap-3 mt-5 justify-center md:justify-start">
-                                <button type="submit" class="box-border inline-flex items-center justify-center w-auto px-8 py-2 overflow-hidden font-bold text-white transition-all duration-300 bg-orange-700 hover:bg-teal-700 ring-2 ring-orange-700 hover:ring-teal-700 ring-offset-2 ring-offset-orange-700 hover:ring-offset-teal-700 rounded-full cursor-pointer group ease focus:outline-none">
-                                    <span class="group-hover:text-yellow-500 transition-colors duration-300">Buy Now</span>
+                                <button type="submit" class="inline-flex items-center justify-center w-auto px-8 py-2 overflow-hidden font-bold text-white transition-all duration-300 bg-[#f65004] hover:bg-[#007789] ring-1 ring-[#f65004] hover:ring-[#007789] ring-offset-2 ring-offset-[#f65004] hover:ring-offset-[#007789] rounded-full cursor-pointer group ease focus:outline-none">
+                                    <span class="transition-colors duration-300">Buy Now</span>
                                 </button>                                                                                              
 
-                                <button type="button" onclick="addToCart2('{{$product->id}}')" class="rounded-full px-3 py-2 overflow-hidden relative group cursor-pointer border-2 font-medium border-orange-600 text-indigo-600 flex items-center hover:bg-teal-700 hover:text-white justify-center gap-2">
+                                <button type="button" onclick="addToCart2('{{$product->id}}')" class="rounded-full px-3 py-2 overflow-hidden relative group cursor-pointer ring-1 font-medium flex items-center ring-[#007789] hover:bg-[#007789] justify-center gap-2 text-black hover:text-white">
                                     <span class="absolute w-64 h-0 transition-all duration-300 origin-center rotate-45 -translate-x-20 top-1/2 group-hover:h-64 group-hover:-translate-y-32 ease"></span>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 relative transition-all">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                     </svg>
-                                    <span class="relative text-indigo-600 transition group-hover:text-yellow-500 duration-300 ease mt-1">Add to Bag</span>
+                                    <span class="relative transition duration-300 ease mt-1">Add to Bag</span>
                                 </button>
                             </div>
                         </form>
@@ -210,26 +210,29 @@
                         <div class="flex flex-col md:flex-row gap-3 mt-5 w-[80%]">
                             <div class="flex w-full md:w-1/2">
                                 <a href="https://api.whatsapp.com/send?phone={{ $settings_g['whatsapp_number'] }}&amp;text={{ Request::url() }}&amp;" 
-                                   class="flex items-center gap-2 rounded flex-1 text-lg font-bold border hover:shadow-lg p-2">
+                                   class="flex items-center gap-2 rounded flex-1 text-lg font-bold border p-2 transition-transform duration-300 hover:scale-105 hover:bg-[#007789] hover:text-white hover:shadow-xl">
                                     <img src="https://pngimg.com/d/whatsapp_PNG21.png" alt="whatsapp" class="w-[30px]">
                                     <span class="text-sm">WhatsApp</span>
                                 </a>
                             </div>
                             <div class="flex w-full md:w-1/2">
-                                <span class="flex items-center gap-2 rounded flex-1 text-lg font-bold border hover:shadow-lg p-2">
+                                <span class="flex items-center gap-2 rounded flex-1 text-lg font-bold border p-2 transition-transform duration-300 hover:scale-105 hover:bg-[#ea9901] hover:text-white hover:shadow-xl">
                                     <img src="{{ asset('img/warranty.png') }}" alt="delivery icon" loading="lazy" class="w-[30px]">
                                     <span class="text-sm">{{ $product->warranty ?? 'No' }} Warranty</span>
                                 </span>
                             </div>
                         </div>
-                        <div class="flex flex-col md:flex-row gap-3 mt-2 w-[80%]">
+                        @if($product->brand)
+                        <div class="flex flex-col md:flex-row gap-3 mt-5 w-[80%]">
                             <div class="flex w-full md:w-1/2">
-                                <span class="flex items-center gap-2 rounded flex-1 text-lg font-bold border hover:shadow-lg p-2">
+                                <span class="flex items-center gap-2 rounded flex-1 text-lg font-bold border p-2 transition-transform duration-300 hover:scale-105 hover:bg-[#f65004] hover:text-white hover:shadow-xl">
                                     <img src="{{ $product->brand->img_paths['small'] }}" alt="Brand Icon" loading="lazy" class="w-[30px]">
                                     <span class="text-sm">{{ $product->brand->title }}</span>
                                 </span>
                             </div>
                         </div>
+                        @endif
+                        
                     </div>
                 </div>
 
