@@ -207,15 +207,28 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-1 md:gap-3 mt-5 justify-start md:justify-start w-[80%]">
-                            <a href="https://api.whatsapp.com/send?phone={{ $settings_g['whatsapp_number'] }}&amp;text={{ Request::url() }}&amp;" class="inline-flex items-center justify-start gap-1 rounded flex-1 gap-2 text-lg font-bold border hover:shadow-lg">
-                                <img src="https://pngimg.com/d/whatsapp_PNG21.png" alt="whatsapp" class="w-[30px]">
-                                <span class="text-sm">WhatsApp</span>
-                            </a>
-                            <span class="inline-flex items-center justify-start gap-1 rounded flex-1 rounded gap-2 text-lg font-bold border hover:shadow-lg ml-3">
-                                <img src="{{asset('img/warranty.png')}}" alt="delivery icon" loading="lazy" class="w-[30px]">
-                                <span class="text-sm">{{$product->warranty ?? 'No' }} Warranty</span>
-                            </span>
+                        <div class="flex flex-col md:flex-row gap-3 mt-5 w-[80%]">
+                            <div class="flex w-full md:w-1/2">
+                                <a href="https://api.whatsapp.com/send?phone={{ $settings_g['whatsapp_number'] }}&amp;text={{ Request::url() }}&amp;" 
+                                   class="flex items-center gap-2 rounded flex-1 text-lg font-bold border hover:shadow-lg p-2">
+                                    <img src="https://pngimg.com/d/whatsapp_PNG21.png" alt="whatsapp" class="w-[30px]">
+                                    <span class="text-sm">WhatsApp</span>
+                                </a>
+                            </div>
+                            <div class="flex w-full md:w-1/2">
+                                <span class="flex items-center gap-2 rounded flex-1 text-lg font-bold border hover:shadow-lg p-2">
+                                    <img src="{{ asset('img/warranty.png') }}" alt="delivery icon" loading="lazy" class="w-[30px]">
+                                    <span class="text-sm">{{ $product->warranty ?? 'No' }} Warranty</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col md:flex-row gap-3 mt-2 w-[80%]">
+                            <div class="flex w-full md:w-1/2">
+                                <span class="flex items-center gap-2 rounded flex-1 text-lg font-bold border hover:shadow-lg p-2">
+                                    <img src="{{ $product->brand->img_paths['small'] }}" alt="Brand Icon" loading="lazy" class="w-[30px]">
+                                    <span class="text-sm">{{ $product->brand->title }}</span>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

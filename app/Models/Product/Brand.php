@@ -16,7 +16,7 @@ class Brand extends Model
     use Sluggable;
 
     protected $fillable = [
-        'slug'
+        'title', 'slug'
     ];
 
     public function sluggable(): array
