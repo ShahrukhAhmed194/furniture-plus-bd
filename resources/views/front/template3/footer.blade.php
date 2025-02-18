@@ -1,4 +1,4 @@
-<footer class="bg-[#06402B] pt-2 md:pt-12">
+<footer class="bg-[#007789] pt-2 md:pt-12">
     <div class="{{ $container }} py-4 items-center font-light text-white text-sm lg:text-md mt-5">
         <div class="hidden md:grid grid grid-cols-2 md:grid-cols-5 gap-2 justify-center">
             @foreach ($widgets as $widget)
