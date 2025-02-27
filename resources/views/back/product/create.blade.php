@@ -257,6 +257,18 @@
 
             <div class="card border-light mt-3 shadow">
                 <div class="card-header">
+                    <h6 class="d-inline-block">Product Video</h6>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Imbed Code*</label>
+                        <textarea name="embed_video" id="embed_video" cols="35" rows="5">{{ old('embed_video') }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-light mt-3 shadow">
+                <div class="card-header">
                     <h6 class="d-inline-block">SEO Information</h6>
                 </div>
                 <div class="card-body">

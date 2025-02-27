@@ -330,7 +330,35 @@
                     <p><small>All Image Size must 700*1050px or 700*700px & Image size will not getter then 300KB</small></p>
                 </div>
             </div>
-
+            <div class="card border-light mt-3 shadow">
+                <div class="card-header">
+                    <h6 class="d-inline-block">Product Videos</h6>
+                </div>
+                <div class="card-body">
+                    @if ($product->videos )
+                        @foreach ($product->videos as $video)
+                            <div class="form-group mb-3 video-item">
+                                <div class="embed-responsive embed-responsive-16by9" style="max-width: 300px;">
+                                    {!! $video->embed_video !!}
+                                </div>
+                            </div>
+                    
+                            <div class="mt-4 d-flex justify-content-between align-items-center mb-2">
+                                <button type="button" class="btn btn-sm rounded px-2 text-sm text-white {{$video->status == 1 ? 'bg-success' : 'bg-danger'}}" onclick="selectVideo({{$video->id}})">
+                                    {{$video->status == 1 ? 'Active' : 'Inactive'}}
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm delete-video" onclick="deleteVideo({{$video->id}})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        @endforeach
+                    @endif
+                    <div class="form-group mt-4 overflow-hidden">
+                        <label>Add New Embed Link</label>
+                        <textarea name="embed_video" cols="35" rows="5"></textarea>
+                    </div>
+                </div>
+            </div>
             <div class="card border-light mt-3 shadow">
                 <div class="card-header">
                     <h6 class="d-inline-block">SEO Information</h6>
@@ -631,5 +659,44 @@
         //         });
         //     }
         // });
+    </script>
+
+    {{-- for deleting and updating video --}}
+    <script>
+        function deleteVideo(id) {
+            const videoId = id;
+            $.ajax({
+                url: '{{ route("back.products.delete.video") }}',
+                data: { id: videoId }, 
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert('An error occurred while deleting the video.');
+                }
+            });
+        }
+
+        function selectVideo(id) {
+            const videoId = id;
+            $.ajax({
+                url: '{{ route("back.products.select.video") }}',
+                data: { id: videoId }, 
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert('An error occurred while deleting the video.');
+                }
+            });
+        }
     </script>
 @endsection

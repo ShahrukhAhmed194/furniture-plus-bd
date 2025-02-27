@@ -24,6 +24,7 @@
                         <span>{{ $product->VariableProductData[0]['unit_amount']??1 }}</span>
                     </span>
                         <span class="text-gray-600 text-sm">{{ $product->VariableProductData[0]['unit']??'Pcs' }}</span>
+                        <span class="text-sm text-white px-2 py-[2px] rounded shadow {{ $product->stock > 0 ? 'bg-green-600' : 'bg-red-600' }}"> {{ $product->stock > 0 ? 'In Stock' : 'Out of Stock' }} </span>
                     </div>
                 @else
                     <div class="items-start">
@@ -31,6 +32,7 @@
                         <span>{{ $product->productData['unit_amount']??1 }}</span>
                     </span>
                         <span class="text-gray-600 text-sm">{{ $product->productData['unit']??'Pcs' }}</span>
+                        <span class="text-sm text-white px-2 py-[2px] rounded shadow {{ $product->stock > 0 ? 'bg-green-600' : 'bg-red-600' }}"> {{ $product->stock > 0 ? 'In Stock' : 'Out of Stock' }} </span>
                     </div>
                 @endif
 
@@ -58,7 +60,20 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                 </svg>
                 <span class="mt-1 transition-colors duration-300">Buy Now</span>
-            </a>            
+            </a>
+            <span class="mb-2 flex items-center"> Review: 
+                @for($i = 1; $i <= 5; $i++)
+                    @if($i <= $product->average_rating)
+                        <svg class="w-5 h-5 me-1 text-yellow-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    @else
+                        <svg class="w-5 h-5 me-1 text-gray-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    @endif
+                @endfor
+            </span>
         </div>
     </div>
 </div>

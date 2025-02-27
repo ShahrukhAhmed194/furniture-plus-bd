@@ -12,6 +12,7 @@ use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductData;
 use App\Models\Product\ProductMedia;
 use App\Models\Product\Review;
+use App\Models\Product\ProductVideo;
 use App\Models\Product\Tax;
 use App\Notifications\FacebookPostNotification;
 use App\Repositories\AccountsRepo;
@@ -114,6 +115,7 @@ class ProductController extends Controller
 			//'expire_date' => 'date',
             // 'categories' => 'required',
             'image' => 'required|mimes:jpg,png,jpeg,gif',
+            'embed_video' => ['string', 'regex:/<iframe.*<\/iframe>/i', 'nullable'],
         ]);
 
         // // Check SKU
@@ -161,6 +163,13 @@ class ProductController extends Controller
 
         $product->save();
 
+        // Product embed video
+        if($request->embed_video){
+            $product_video = new ProductVideo();
+            $product_video->product_id = $product->id;
+            $product_video->embed_video = $request->embed_video;
+            $product_video->save();
+        }
         // Simple Attributes
         foreach ($request->attributes as $attribute) {
             $product_attribute = new ProductAttribute;
@@ -371,7 +380,8 @@ class ProductController extends Controller
             "shipping_width" => 'numeric',
             "shipping_height" => 'numeric',
             "shipping_length" => 'numeric',*/
-            // 'categories' => 'required'
+            // 'categories' => 'required',
+            'embed_video' => ['string', 'regex:/<iframe.*<\/iframe>/i', 'nullable'],
         ];
 
         if ($request->type == 'Simple') {
@@ -437,6 +447,14 @@ class ProductController extends Controller
         }
 
         $product->save();
+
+        // Product video add (if any)
+        if($request->embed_video){
+            $product_video = new ProductVideo();
+            $product_video->product_id = $product->id;
+            $product_video->embed_video = $request->embed_video;
+            $product_video->save();
+        }
 
         // Simple Attributes
         ProductAttribute::whereNotIn('attribute_id', (array)$request->simple_attributes)->where('product_id', $product->id)->where('type', 'Simple')->delete();
@@ -855,5 +873,27 @@ class ProductController extends Controller
         ]);
     
         return redirect()->back()->with('success', 'Review submitted successfully!');
+    }
+
+    public function deleteProductVideo(Request $request)
+    {
+        $video = ProductVideo::findOrFail($request->id);
+        $video->delete();
+
+        return redirect()->back()->with('success', 'Video deleted successfully!');
+    }
+
+    public function selectProductVideo(Request $request)
+    {
+        $selecte_video = ProductVideo::findOrFail($request->id);
+        
+        $videos = ProductVideo::where('product_id', $selecte_video->product_id)->get();
+        foreach($videos as $video){
+            $video->status = 0;
+            $video->save();
+        }
+        $selecte_video->status = 1;
+        $selecte_video->save();
+        return redirect()->back()->with('success', 'Video selected successfully!');
     }
 }

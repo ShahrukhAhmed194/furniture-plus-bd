@@ -206,8 +206,10 @@ Route::middleware('auth', 'isAdmin')->group(function () {
         Route::get('products/reviews-action/{review}', [ProductController::class, 'reviewDelete'])->name('back.products.reviewDelete');
         Route::post('products/change-featured', [ProductController::class, 'changeFeatured'])->name('back.products.changeFeatured');
         Route::post('products/review/user', [ProductController::class, 'addUserProductReview'])->name('back.add.reviews');
+        Route::post('products/video/delete', [ProductController::class, 'deleteProductVideo'])->name('back.products.delete.video');
+        Route::post('products/video/select', [ProductController::class, 'selectProductVideo'])->name('back.products.select.video');
         Route::resource('products', ProductController::class, ['as' => 'back']);
-
+        
         // Attribute CRUD
         Route::post('attributes/items/store', [AttributeController::class, 'itemStore'])->name('back.attributes.itemStore');
         Route::get('attributes/items/destroy/{id}', [AttributeController::class, 'itemDestroy'])->name('back.attributes.itemDestroy');
@@ -245,7 +247,7 @@ Route::middleware('auth', 'isAdmin')->group(function () {
     Route::resource('testimonials', TestimonialController::class, ['as' => 'back']);
 
     // Spacial Offers CRUD
-    Route::resource('special-offer', SpecialOfferController::class, ['as' => 'back']);
+    // Route::resource('special-offer', SpecialOfferController::class, ['as' => 'back']);
 
     // Orders
     Route::post('orders/add-item', [OrderController::class, 'addItem'])->name('back.orders.addItem');

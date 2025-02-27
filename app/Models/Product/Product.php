@@ -201,4 +201,14 @@ class Product extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    public function videos()
+    {
+        return $this->hasMany(ProductVideo::class);
+    }
+
+    public function activeVideos()
+    {
+        return $this->hasMany(ProductVideo::class)->active();
+    }
 }

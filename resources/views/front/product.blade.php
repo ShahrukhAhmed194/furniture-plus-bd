@@ -11,61 +11,8 @@
 
     <link rel="stylesheet" href="{{asset('front/OwlCarousel/dist/assets/owl.carousel.min.css')}}">
     <link rel="stylesheet" href="{{asset('front/OwlCarousel/dist/assets/owl.theme.default.min.css')}}">
-    <style>
-        /* Ensure the content is responsive */
-        .content {
-            max-width: 100%;
-            word-wrap: break-word;
-        }
+    <link rel="stylesheet" href="{{asset('front/product-details.css')}}">
         
-        /* Responsive video embeds */
-        .content iframe, .content video {
-            width: 100%; /* Video takes full width of the container */
-            height: auto; /* Keeps the aspect ratio */
-            max-width: 100%; /* Ensures videos don't overflow */
-        }
-        
-        /* Video wrapper for aspect ratio */
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio (adjust as needed) */
-            height: 0;
-            overflow: hidden;
-        }
-        
-        .video-wrapper iframe, .video-wrapper video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        
-        /* Text adjustments for readability */
-        @media (max-width: 768px) {
-            .content {
-                font-size: 14px; /* Slightly smaller font on smaller screens */
-                padding: 10px; /* Add some padding for mobile readability */
-            }
-        }
-        
-        @media (min-width: 769px) {
-            .content {
-                font-size: 16px;
-                padding: 20px;
-            }
-        }
-
-        #product_preview2 {
-            transition: transform 0.3s ease;
-            cursor: zoom-in;
-        }
-
-        #product_preview2:hover {
-            transform: scale(1.5);
-            transform-origin: center center;
-        }
-    </style>
 @endsection
 @php
     $template = 0;
@@ -89,13 +36,32 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 md:gap-5 gap-2">
                 <div class="flex items-center justify-center">
                     <div class="flex flex-col gap-3">
-                        <div class="border flex items-center justify-center rounded-lg overflow-hidden real">
-                            <img id="product_preview2" src="{{$product->img_paths['original']}}" class="w-full h-auto object-center shadow-md  hover:scale-150 transition-all duration-500" width="300" height="160" alt="{{ $product->title }}"/>
+                        <div class="border rounded-lg overflow-hidden shadow-md relative">
+                            <img id="zoom_product_image" src="{{$product->img_paths['original']}}" 
+                                 alt="{{$product->title}}" 
+                                 class="w-full h-[550px] object-center">
                         </div>
                         <div class="flex gap-3 items-center justify-start">
-                            <img src="{{$product->img_paths['small']}}" class="w-[100px] md:w-[100px] border rounded-lg cursor-pointer hover:opacity-70 transition-all" onclick="changeProductImage2('{{$product->img_paths['original']}}');" alt="{{ $product->title }}"/>
+                            @if(count($product->videos) > 0)
+                                <img src="{{ asset('uploads/image/video_player.png') }}" class="w-[100px] md:w-[100px] border rounded-lg cursor-pointer hover:opacity-70 transition-all" alt="{{ $product->title }}" onclick="openVideoPopup()" />
+                                <div id="videoPopup" class="popup-overlay">
+                                    <div class="popup-content">
+                                        <span class="close-btn" onclick="closeVideoPopup()">&times;</span>
+                                        @foreach ($product->activeVideos as $video)
+                                            @if($video->status == 1)
+                                                <div class="embed-responsive embed-responsive-16by9">
+                                                    {!! $video->embed_video !!}
+                                                </div>
+                                                @break
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
                             @foreach ($product->Gallery as $gallery)
-                                <img src="{{$gallery->paths['small']}}" onclick="changeProductImage2('{{$gallery->paths['original']}}');" class="w-[100px] md:w-[100px] border rounded-lg cursor-pointer hover:opacity-70 transition-all" alt="{{ $product->title }}"/>
+                                <div class="shadow-md cursor-pointer hover:shadow-lg" onclick="changeProductImage('{{$gallery->paths['original']}}');">
+                                    <img src="{{$gallery->paths['small']}}" class="w-full h-20 object-cover rounded-lg">
+                                </div>
                             @endforeach
                         </div>
                     </div>
@@ -113,12 +79,14 @@
                                 <span><span class="unit_show">{{ $product->VariableProductData[0]['unit_amount']??1 }}</span></span>
                                 </span>
                                 <span class="text-gray-600 text-sm">{{ $product->VariableProductData[0]['unit']??'Pcs' }}</span>
+                                <span class="text-white px-3 py-1 rounded shadow {{ $product->stock > 0 ? 'bg-green-600' : 'bg-red-600' }}"> {{ $product->stock > 0 ? 'In Stock' : 'Out of Stock' }} </span>
                             @else
                                 <input type="hidden" value="{{ $product->productData['unit_amount']??1 }}" id="unit_default_val">
                                 <span class="text-teal-600 font-semibold text-sm md:text-lg mx-0">
                                 <span><span class="unit_show">{{ $product->productData['unit_amount']??1 }}</span></span>
                                 </span>
                                 <span class="text-gray-600 text-sm">{{ $product->productData['unit']??'Pcs' }}</span>
+                                <span class="text-white px-3 py-1 rounded shadow {{ $product->stock > 0 ? 'bg-green-600' : 'bg-red-600' }}"> {{ $product->stock > 0 ? 'In Stock' : 'Out of Stock' }} </span>
                             @endif
                        </div>
                         <div class="flex items-end gap-2">
@@ -226,8 +194,8 @@
                         <div class="flex flex-col md:flex-row gap-3 mt-5 w-[80%]">
                             <div class="flex w-full md:w-1/2">
                                 <span class="flex items-center gap-2 rounded flex-1 text-lg font-bold border p-2 transition-transform duration-300 hover:scale-105 hover:bg-[#f65004] hover:text-white hover:shadow-xl">
+                                    <span class="text-md">Brand: &nbsp;</span>
                                     <img src="{{ $product->brand->img_paths['small'] }}" alt="Brand Icon" loading="lazy" class="w-[30px]">
-                                    <span class="text-sm">{{ $product->brand->title }}</span>
                                 </span>
                             </div>
                         </div>
@@ -262,7 +230,7 @@
                     <div>
                         <div class="justify-center px-2 text-center">
                             @if (Auth::check())
-                            <div class="max-w-md mx-auto">
+                            {{-- <div class="max-w-md mx-auto">
                                 <form id="reviewForm" action="{{Route('back.add.reviews')}}" method="POST">
                                     @csrf
                                     @if ($errors->any())
@@ -326,7 +294,7 @@
                                         </button>
                                     </div>
                                 </form>
-                            </div>
+                            </div> --}}
                             
                             @else
                                 <p>You are not logged in. Please log in to give review</p>
@@ -536,48 +504,7 @@
 @endsection
 
 @section('footer')
-<script>
-    const productPreview = document.getElementById('product_preview2');
-    const productContainer = productPreview.closest('.border'); // Get the container of the image
 
-    productContainer.addEventListener('mouseenter', () => {
-        productPreview.style.transition = 'transform 0.3s ease';
-        productPreview.style.transform = 'scale(1.5)';
-    });
-
-    productContainer.addEventListener('mousemove', (e) => {
-        const { left, top, width, height } = productContainer.getBoundingClientRect();
-        const x = e.clientX - left;
-        const y = e.clientY - top;
-        
-        const xPercent = (x / width) * 250;
-        const yPercent = (y / height) * 250;
-        
-        productPreview.style.transformOrigin = `${xPercent}% ${yPercent}%`;
-    });
-
-    productContainer.addEventListener('mouseleave', () => {
-        productPreview.style.transition = 'transform 0.3s ease';
-        productPreview.style.transform = 'scale(1)';
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const stars = document.querySelectorAll(".star");
-        const ratingInput = document.getElementById("rating");
-
-        stars.forEach(star => {
-            star.addEventListener("click", function () {
-                const value = this.getAttribute("data-value");
-                ratingInput.value = value;
-
-                stars.forEach(s => s.classList.remove("text-yellow-500"));
-                for (let i = 0; i < value; i++) {
-                    stars[i].classList.add("text-yellow-500");
-                }
-            });
-        });
-    });
-</script>
     <script src="{{asset('front/OwlCarousel/dist/owl.carousel.min.js')}}"></script>
 
     <script src="{{asset('front/magiczoomplus.js')}}?c=1"></script>
@@ -615,6 +542,7 @@
     <script>
         $(document).ready(function(){
             $(".responsive_video").fitVids()
+            zoomProduct();
         });
     </script>
 
@@ -724,5 +652,62 @@
                 }
             });
         });
+    </script>
+
+    {{-- Functions for showing product video --}}
+    <script>
+        // Function to open the video popup
+        function openVideoPopup() {
+            $('#videoPopup').css('display', 'flex');
+        }
+
+        // Function to close the video popup
+        function closeVideoPopup() {
+            $('#videoPopup').css('display', 'none');
+            pauseYouTubeVideo(); // Pause the YouTube video when the popup closes
+        }
+
+        // Close the popup if the user clicks outside the content
+        $(document).on('click', function(event) {
+            const popup = $('#videoPopup');
+            if (event.target === popup[0]) {
+                closeVideoPopup();
+            }
+        });
+
+        // Function to pause the YouTube video
+        function pauseYouTubeVideo() {
+            const iframe = $('#videoPopup iframe')[0];
+            if (iframe) {
+                const iframeSrc = iframe.src; // Get the current src of the iframe
+                iframe.src = iframeSrc; // Reset the src to stop the video
+            }
+        }
+    </script>
+
+    {{-- Functions for zooming product image --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+    <script>
+        function changeProductImage(path){
+            $('#zoom_product_image').attr('src', '');
+            $('#zoom_product_image').attr('src', path);
+            $('.zoomContainer').remove();
+            $('#zoom_product_image').removeData('elevateZoom');
+            zoomProduct();
+        }
+
+        function zoomProduct(){
+            $('#zoom_product_image').elevateZoom({
+                zoomType: "window",
+                cursor: "crosshair",
+                zoomWindowFadeIn: 500,
+                zoomWindowFadeOut: 500,
+                zoomWindowWidth: 400,
+                zoomWindowHeight: 400,
+                borderSize: 1,
+                borderColor: "#ddd",
+            });
+        }
+
     </script>
 @endsection
