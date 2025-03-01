@@ -38,12 +38,14 @@
 
                 <div class="flex items-start flex-col md:flex-row mt-0 mb-3">
                     <div class="text-sm md:text-lg">
-                        <div class="flex items-start">
-                            <span class="font-bold">{{ $settings_g['currency_symbol'] ?? '৳' }} {{amount($product->prices['sale_price'],0)}}</span>
+                        <div class="flex flex-col">
+                            <span class="font-bold text-[#f65004]">{{ $settings_g['currency_symbol'] ?? '৳' }} {{amount($product->prices['sale_price'],0)}}</span>
                             @if($product->prices['regular_price'] > 0  && $product->prices['regular_price'] > $product->prices['sale_price'])
-                                <span class="text-gray-600 font-bold line-through text-sm md:text-md mt-1"> / <span class="">{{ $settings_g['currency_symbol'] ?? '৳' }}{{ $product->prices['regular_price'] }}</span></span>
+                                <div class="flex-row">
+                                    <span class="text-gray-600 font-bold line-through text-sm md:text-md">{{ $settings_g['currency_symbol'] ?? '৳' }}{{ $product->prices['regular_price'] }}</span>
+                                    <span class="text-black font-bold text-sm md:text-md">&nbsp;{{ number_format((($product->prices['regular_price'] - $product->prices['sale_price']) / $product->prices['regular_price']) * 100, 2) }}%</span>
+                                </div>
                             @endif
-                            {{--<h3 class="text-gray-600 text-sm flex items-center">/ <span class="line-through">600</span></h3>--}}
                         </div>
                     </div>
                 </div>

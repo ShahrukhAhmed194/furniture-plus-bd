@@ -24,6 +24,7 @@ use App\Traits\CommonTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -860,18 +861,47 @@ class ProductController extends Controller
     public function addUserProductReview(Request $request)
     {
         $request->validate([
-            'review' => 'required|string|min:2|max:1000',
-            'rating' => 'required|integer|min:1|max:5',
-            'product_id' => 'required|integer',
+            'product_id' => 'required|exists:products,id',
+            'review' => 'required|string|max:1000',
+            'rating' => 'required|integer|between:1,5',
         ]);
 
-        Review::create([
+        $user = Auth::user();
+
+        // Check if the user has already submitted a rating for this product
+        $existingReview = Review::where('user_id', $user->id)
+            ->where('product_id', $request->product_id)
+            ->first();
+
+        if ($existingReview) {
+            if($existingReview->rating < $request->rating){
+                $existingReview->update([
+                    'review' => $request->review,
+                    'rating' => $request->rating,
+                ]);
+            }else{
+                $existingReview->update([
+                    'review' => $request->review,
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Review updated successfully!');
+        }
+
+        // If the user hasn't submitted a rating, create a new review
+        $review = Review::create([
             'product_id' => $request->product_id,
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'review' => $request->review,
             'rating' => $request->rating,
         ]);
-    
+
+        // Update the product's total_review and average_rating
+        $product = Product::find($request->product_id);
+        $product->total_review = $product->review()->count();
+        $product->average_rating = $product->review()->avg('rating');
+        $product->save();
+
         return redirect()->back()->with('success', 'Review submitted successfully!');
     }
 

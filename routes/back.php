@@ -205,7 +205,7 @@ Route::middleware('auth', 'isAdmin')->group(function () {
         Route::get('products/reviews-action/{review}/{action}', [ProductController::class, 'reviewAction'])->name('back.products.reviewAction');
         Route::get('products/reviews-action/{review}', [ProductController::class, 'reviewDelete'])->name('back.products.reviewDelete');
         Route::post('products/change-featured', [ProductController::class, 'changeFeatured'])->name('back.products.changeFeatured');
-        Route::post('products/review/user', [ProductController::class, 'addUserProductReview'])->name('back.add.reviews');
+        // Route::post('products/review/user', [ProductController::class, 'addUserProductReview'])->name('back.add.reviews');
         Route::post('products/video/delete', [ProductController::class, 'deleteProductVideo'])->name('back.products.delete.video');
         Route::post('products/video/select', [ProductController::class, 'selectProductVideo'])->name('back.products.select.video');
         Route::resource('products', ProductController::class, ['as' => 'back']);
@@ -298,4 +298,12 @@ Route::middleware('auth', 'isAdmin')->group(function () {
     Route::post('landing-builders-b/store', [LandingBuilderController::class, 'landingBuilderBStore'])->name('back.landingBuilderB.store');
     Route::get('landing-builders-b/edit/{id}', [LandingBuilderController::class, 'landingBuilderBEdit'])->name('back.landingBuilderB.edit');
     Route::post('landing-builders-b/update/{id}', [LandingBuilderController::class, 'landingBuilderBUpdate'])->name('back.landingBuilderB.update');
+});
+
+Route::middleware('auth')->group(function(){
+    // Products
+    Route::prefix('product')->group(function () {
+        // Review
+        Route::post('products/review/user', [ProductController::class, 'addUserProductReview'])->name('back.add.reviews');
+    });
 });

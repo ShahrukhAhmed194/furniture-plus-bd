@@ -96,7 +96,7 @@
                                 <span class="text-neutral-500 line-through">/{{ $settings_g['currency_symbol'] ?? '৳' }}<span class="price_show2">{{ $product->prices['regular_price'] }}</span></span>
                             @endif
                         </div>
-                        <div class="sp_variation mb-8">
+                        <div class="sp_variation mb-4">
                             @foreach ($product->VariableAttributes as $key=>$attribute)
                                 <div><span class="mr-2 mt-2 d-inline-block"><b>{{$attribute->name}}:</b></span></div>
 
@@ -111,13 +111,20 @@
                                     @endforeach
                                 </ul>
                             @endforeach
+                            <span class="mt-2 flex items-center font-bold"> Rating: &nbsp; 
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <= $product->average_rating)
+                                        <svg class="w-5 h-5 me-1 text-yellow-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        </svg>
+                                    @else
+                                        <svg class="w-5 h-5 me-1 text-gray-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        </svg>
+                                    @endif
+                                @endfor
+                            </span>
                         </div>
-                        @if($product->total_review >0)
-                            <div>
-                                <span class="text-lg"> {{ $product->average_rating }}</span>
-                                <span class="text-orange-400 text-sm">({{ $product->total_review }} reviews)</span>
-                            </div>
-                        @endif
 
                         <form method="get" action="{{route('cart.directOrder')}}">
                             @csrf
@@ -226,166 +233,107 @@
                 <div class="hidden p-4 rounded-lg" id="nutrition" role="tabpanel" aria-labelledby="nutrition-tab">
                     <div class="content">{!! $product->nutrition !!}</div>
                 </div>
-                <div class="hidden p-4 rounded-lg" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-                    <div>
-                        <div class="justify-center px-2 text-center">
-                            @if (Auth::check())
-                            {{-- <div class="max-w-md mx-auto">
-                                <form id="reviewForm" action="{{Route('back.add.reviews')}}" method="POST">
-                                    @csrf
-                                    @if ($errors->any())
-                                        <div class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
+                <div class="hidden p-4 rounded-lg bg-gray-50" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                    <!-- Customer Reviews Section -->
+                    <div class="max-w-2xl mx-auto mt-8">
+                        <h2 class="text-2xl font-semibold text-center mb-6">Customer Reviews</h2>
+                
+                        <!-- Average Rating -->
+                        <div class="text-center mb-6">
+                            <div class="flex items-center justify-center space-x-2">
+                                <div class="flex items-center">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <svg class="w-6 h-6 {{ $i <= $average ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z" />
+                                        </svg>
+                                    @endfor
+                                </div>
+                                <p class="text-lg font-medium text-gray-700">
+                                    {{ number_format($average, 1) }} out of 5
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">{{ $product->review->count() }} reviews</p>
+                        </div>
+                
+                        <!-- Individual Reviews -->
+                        <div class="space-y-6">
+                            @foreach ($product->review as $review)
+                                <div class="bg-white p-6 rounded-lg shadow-md">
+                                    <div class="flex items-center mb-4">
+                                        <figcaption class="flex items-center mt-4 space-x-3">
+                                            <img class="w-8 h-8 rounded-full" src="{{ $review->user->profile_path }}" alt="{{ $review->user->full_name }}">
+                                            <div class="text-sm font-medium text-gray-900">{{ $review->user->full_name }}</div>
+                                        </figcaption>
+                                        <!-- Star rating -->
+                                        <div class="flex items-center pl-3 mt-3">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <svg class="w-5 h-5 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z" />
+                                                </svg>
+                                            @endfor
                                         </div>
-                                    @endif
-                                    <!-- Textarea -->
+                                    </div>
+                                    <!-- Review Text -->
+                                    <blockquote>
+                                        <p class="text-gray-700">{{ $review->review }}</p>
+                                    </blockquote>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Review Form Section -->
+                    <div class="max-w-2xl mx-auto mt-4">
+                        @if (Auth::check())
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h2 class="text-xl font-semibold mb-4">Leave a Review</h2>
+                                <form id="reviewForm" action="{{ route('back.add.reviews') }}" method="POST">
+                                    @csrf
+                                    <!-- Review Textarea -->
                                     <div class="mb-4">
                                         <label for="review" class="block mb-2 text-sm font-medium text-gray-700">
                                             Your Review
                                         </label>
                                         <textarea id="review" name="review" rows="4"
                                             class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            placeholder="Write your review here..."></textarea>
+                                            placeholder="Write your review here..." required></textarea>
                                     </div>
-                            
-                                    <div class="mt-5 my-5">
-                                        <p>Your Rating</p>
+                                
+                                    <!-- Rating Section -->
+                                    <div class="mb-4">
+                                        <label class="block mb-2 text-sm font-medium text-gray-700">
+                                            Your Rating
+                                        </label>
                                         <div class="flex space-x-1">
                                             <input type="hidden" id="rating" name="rating" value="0">
-                                            <svg class="w-6 h-6 text-gray-300 cursor-pointer star" data-value="1" fill="currentColor"
-                                                viewBox="0 0 22 20">
-                                                <path
-                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                            </svg>
-                                            <svg class="w-6 h-6 text-gray-300 cursor-pointer star" data-value="2" fill="currentColor"
-                                                viewBox="0 0 22 20">
-                                                <path
-                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                            </svg>
-                                            <svg class="w-6 h-6 text-gray-300 cursor-pointer star" data-value="3" fill="currentColor"
-                                                viewBox="0 0 22 20">
-                                                <path
-                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                            </svg>
-                                            <svg class="w-6 h-6 text-gray-300 cursor-pointer star" data-value="4" fill="currentColor"
-                                                viewBox="0 0 22 20">
-                                                <path
-                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                            </svg>
-                                            <svg class="w-6 h-6 text-gray-300 cursor-pointer star" data-value="5" fill="currentColor"
-                                                viewBox="0 0 22 20">
-                                                <path
-                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                            </svg>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <svg class="w-8 h-8 text-gray-300 cursor-pointer star hover:text-yellow-400 transition-colors duration-200" data-value="{{ $i }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z" />
+                                                </svg>
+                                            @endfor
                                         </div>
                                     </div>
-
-                                    <input type="hidden" name="product_id" value="{{$product->id}}">
-                            
+                                
+                                    <!-- Hidden Product ID -->
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                
                                     <!-- Submit Button -->
-                                    <div id="reviewSubmit">
+                                    <div class="mt-6">
                                         <button type="submit"
-                                            class="px-4 py-2 text-white bg-blue-500 rounded-lg w-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                            Submit
+                                            class="px-6 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200">
+                                            Submit Review
                                         </button>
                                     </div>
                                 </form>
-                            </div> --}}
-                            
-                            @else
-                                <p>You are not logged in. Please log in to give review</p>
-                            @endif
-                        </div>
-
-                        <div class="justify-center px-2 py-5 text-center">
-                            <h1 class="justify-center text-center">Customer Reviews</h1>
-                            <div class="justify-center text-center">
-                                <div class="flex items-center justify-center">
-                                    <div class="flex items-center">
-
-                                        @for( $i = 1; $i <= $average; $i++)
-                                            <i class="text-yellow-500 star fa-solid fa-star"></i>
-                                        @endfor
-
-                                        @for( $i = 1; $i <= $rest ; $i++)
-                                            <i class="text-gray-500 star fa-solid fa-star"></i>
-                                         @endfor
-
-                                         @if( ceil($average) == 0)
-                                            <p>No review submitted</p>
-                                         @else
-                                        <p class="text-sm font-medium text-gray-500 ms-1 dark:text-gray-400">
-                                            {{    ceil($average)  }}</p>
-                                        <p class="text-sm font-medium text-gray-500 ms-1 dark:text-gray-400">out of</p>
-                                        <p class="text-sm font-medium text-gray-500 ms-1 dark:text-gray-400"> 5</p>
-                                        @endif
-                                    </div>
-                                    <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
-
-                                    <a href="#"
-                                        class="text-sm font-medium text-gray-900 underline hover:no-underline">{{ $product->review->count() }}
-                                        reviews</a>
-                                </div>
                             </div>
-                        </div>
-
-                        @foreach ($product->review as $review)
-                            <div>
-                                <figure class="px-2 py-2 border max-w-screen">
-                                    <div class="flex items-center mb-4">
-                                        <svg class="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor" viewBox="0 0 22 20">
-                                            <path
-                                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                        </svg>
-                                        <svg class="w-5 h-5 me-1 {{ $review->rating > 1 ? '' : 'text-gray-300' }}"
-                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                            viewBox="0 0 22 20">
-                                            <path
-                                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                        </svg>
-                                        <svg class="w-5 h-5 me-1 {{ $review->rating > 2 ? '' : 'text-gray-300' }}"
-                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                            viewBox="0 0 22 20">
-                                            <path
-                                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                        </svg>
-                                        <svg class="w-5 h-5 me-1 {{ $review->rating > 3 ? '' : 'text-gray-300' }}"
-                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                            viewBox="0 0 22 20">
-                                            <path
-                                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                        </svg>
-                                        <svg class="w-4 h-4 ms-1 {{ $review->rating > 4 ? '' : 'text-gray-300' }}"
-                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                            viewBox="0 0 22 20">
-                                            <path
-                                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                        </svg>
-                                    </div>
-                                    <blockquote>
-                                        <p class="text-2xl font-semibold text-gray-900">
-                                            {{ $review->review }}
-                                        </p>
-                                    </blockquote>
-                                    <figcaption class="flex items-center mt-6 space-x-3 rtl:space-x-reverse">
-                                        <img class="w-6 h-6 rounded-full"
-                                            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
-                                            alt="profile picture">
-                                        <div
-                                            class="flex items-center divide-x-2 divide-gray-300 rtl:divide-x-reverse dark:divide-gray-700">
-                                            <cite class="font-medium text-gray-900 pe-3">{{ $review->name }}</cite>
-                                        </div>
-                                    </figcaption>
-                                </figure>
+                        @else
+                            <div class="text-center py-6">
+                                <p class="text-gray-600">You are not logged in. <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Log in</a> to leave a review.</p>
                             </div>
-                        @endforeach
+                        @endif
                     </div>
                 </div>
+                
             </div>
         </div>
     @else
@@ -709,5 +657,23 @@
             });
         }
 
+    </script>
+
+    {{-- Functions for review --}}
+    <script>
+        $(document).ready(function () {
+            // Star Rating Interaction
+            $('.star').on('click', function () {
+                const value = $(this).data('value');
+                $('#rating').val(value);
+                $('.star').each(function () {
+                    if ($(this).data('value') <= value) {
+                        $(this).addClass('text-yellow-400').removeClass('text-gray-300');
+                    } else {
+                        $(this).addClass('text-gray-300').removeClass('text-yellow-400');
+                    }
+                });
+            });
+        });
     </script>
 @endsection
