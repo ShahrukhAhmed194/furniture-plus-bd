@@ -42,7 +42,7 @@
                                  class="w-full h-[550px] object-center">
                         </div>
                         <div class="flex gap-3 items-center justify-start">
-                            @if(count($product->videos) > 0)
+                            @if(count($product->activeVideos) > 0)
                                 <img src="{{ asset('uploads/image/video_player.png') }}" class="w-[100px] md:w-[100px] border rounded-lg cursor-pointer hover:opacity-70 transition-all" alt="{{ $product->title }}" onclick="openVideoPopup()" />
                                 <div id="videoPopup" class="popup-overlay">
                                     <div class="popup-content">
