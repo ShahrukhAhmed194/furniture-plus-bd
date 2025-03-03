@@ -20,18 +20,10 @@
             <div class="">
                 @if($product->type && $product->type=="Variable" && count($product->VariableProductData))
                     <div class="items-start">
-                    <span class="text-teal-600 font-semibold text-sm md:text-lg mx-0">
-                        <span>{{ $product->VariableProductData[0]['unit_amount']??1 }}</span>
-                    </span>
-                        <span class="text-gray-600 text-sm">{{ $product->VariableProductData[0]['unit']??'Pcs' }}</span>
                         <span class="text-sm text-white px-2 py-[2px] rounded shadow {{ $product->stock > 0 ? 'bg-green-600' : 'bg-red-600' }}"> {{ $product->stock > 0 ? 'In Stock' : 'Out of Stock' }} </span>
                     </div>
                 @else
                     <div class="items-start">
-                    <span class="text-teal-600 font-semibold text-sm md:text-lg mx-0">
-                        <span>{{ $product->productData['unit_amount']??1 }}</span>
-                    </span>
-                        <span class="text-gray-600 text-sm">{{ $product->productData['unit']??'Pcs' }}</span>
                         <span class="text-sm text-white px-2 py-[2px] rounded shadow {{ $product->stock > 0 ? 'bg-green-600' : 'bg-red-600' }}"> {{ $product->stock > 0 ? 'In Stock' : 'Out of Stock' }} </span>
                     </div>
                 @endif

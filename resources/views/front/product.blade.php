@@ -58,11 +58,16 @@
                                     </div>
                                 </div>
                             @endif
-                            @foreach ($product->Gallery as $gallery)
-                                <div class="shadow-md cursor-pointer hover:shadow-lg" onclick="changeProductImage('{{$gallery->paths['original']}}');">
-                                    <img src="{{$gallery->paths['small']}}" class="w-full h-20 object-cover rounded-lg">
+                            @if(count($product->Gallery) > 0)
+                                <div class="shadow-md cursor-pointer hover:shadow-lg" onclick="changeProductImage('{{$product->img_paths['original']}}');">
+                                    <img src="{{$product->img_paths['small']}}" class="w-full h-20 object-cover rounded-lg">
                                 </div>
-                            @endforeach
+                                @foreach ($product->Gallery as $gallery)
+                                    <div class="shadow-md cursor-pointer hover:shadow-lg" onclick="changeProductImage('{{$gallery->paths['original']}}');">
+                                        <img src="{{$gallery->paths['small']}}" class="w-full h-20 object-cover rounded-lg">
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>
