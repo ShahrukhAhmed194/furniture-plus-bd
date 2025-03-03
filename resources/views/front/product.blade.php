@@ -650,16 +650,24 @@
         }
 
         function zoomProduct(){
-            $('#zoom_product_image').elevateZoom({
-                zoomType: "window",
-                cursor: "crosshair",
-                zoomWindowFadeIn: 500,
-                zoomWindowFadeOut: 500,
-                zoomWindowWidth: 400,
-                zoomWindowHeight: 400,
-                borderSize: 1,
-                borderColor: "#ddd",
-            });
+            const isLargeScreen = window.matchMedia("(min-width: 768px)").matches;
+
+            if (isLargeScreen) {
+                $('#zoom_product_image').elevateZoom({
+                    zoomType: "window",
+                    cursor: "crosshair",
+                    zoomWindowFadeIn: 500,
+                    zoomWindowFadeOut: 500,
+                    zoomWindowWidth: 400,
+                    zoomWindowHeight: 400,
+                    borderSize: 1,
+                    borderColor: "#ddd",
+                });
+            } else {
+                $('#zoom_product_image').removeData('elevateZoom');
+                $('#zoom_product_image').removeAttr('data-zoom-image');
+            }
+            window.matchMedia("(min-width: 768px)").addEventListener('change', zoomProduct);
         }
 
     </script>
