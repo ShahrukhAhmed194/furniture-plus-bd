@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="{{asset('front/OwlCarousel/dist/assets/owl.carousel.min.css')}}">
     <link rel="stylesheet" href="{{asset('front/OwlCarousel/dist/assets/owl.theme.default.min.css')}}">
-    <link rel="stylesheet" href="{{asset('front/product-details.css')}}">
+    <link rel="stylesheet" href="{{asset('front/product-details-1.0.0.css')}}">
         
 @endsection
 @php
@@ -34,12 +34,12 @@
      @if($template ==3)
         <div>
             <div class="grid grid-cols-1 lg:grid-cols-2 md:gap-5 gap-2">
-                <div class="flex items-center justify-center">
+                <div class="flex items-center justify-center" id="desktop">
                     <div class="flex flex-col gap-3">
-                        <div class="border rounded-lg overflow-hidden shadow-md relative">
+                        <div class="border rounded-lg overflow-hidden shadow-md relative w-full h-[400px]">
                             <img id="zoom_product_image" src="{{$product->img_paths['original']}}" 
                                  alt="{{$product->title}}" 
-                                 class="w-full h-[550px] object-center">
+                                 class="w-full h-full object-contain object-center">
                         </div>
                         <div class="flex gap-3 items-center justify-start">
                             @if(count($product->activeVideos) > 0)
@@ -70,6 +70,34 @@
                             @endif
                         </div>
                     </div>
+                </div>
+                <div class="owl-carousel owl-theme" id="mobile">
+                    @if(count($product->activeVideos) > 0)
+                        @foreach ($product->activeVideos as $video)
+                            @if($video->status == 1)
+                                <div class="item">
+                                    <div class="mobile-embed embed-responsive embed-responsive-16by9">
+                                        {!! $video->embed_video !!}
+                                    </div>
+                                </div>
+                                @break
+                            @endif
+                        @endforeach
+                    @endif
+                    @if(count($product->Gallery) > 0)
+                        <div class="item">
+                            <div class="shadow-md cursor-pointer hover:shadow-lg">
+                                <img src="{{$product->img_paths['original']}}" class="w-full h-[400px] object-cover rounded-lg">
+                            </div>
+                        </div>
+                        @foreach ($product->Gallery as $gallery)
+                            <div class="item">
+                                <div class="shadow-md cursor-pointer hover:shadow-lg">
+                                    <img src="{{$gallery->paths['original']}}" class="w-full h-[400px] object-cover rounded-lg">
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
                 <div>
                     <div class="flex flex-col gap-3 text-wrap">
@@ -215,7 +243,6 @@
                         
                     </div>
                 </div>
-
             </div>
 
             <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
@@ -489,6 +516,27 @@
             },
             lazyLoad: false
         });
+
+        $(".owl-carousel").owlCarousel({
+            items: 1,
+            loop: false,
+            nav: true,
+            dots: true,
+            autoplay: false,
+            navText: ["<span class='prev'>&#10094;</span>", "<span class='next'>&#10095;</span>"], // Unicode arrows for better visibility
+            responsive: {
+                0: {
+                    items: 1,
+                },
+                600: {
+                    items: 1,
+                },
+                1000: {
+                    items: 1,
+                },
+            },
+        });
+
     </script>
 
     <script src="{{asset('front/fitvids.js/jquery.fitvids.js')}}"></script>
@@ -671,7 +719,6 @@
         }
 
     </script>
-
     {{-- Functions for review --}}
     <script>
         $(document).ready(function () {
