@@ -72,18 +72,6 @@
                     </div>
                 </div>
                 <div class="owl-carousel owl-theme" id="mobile">
-                    @if(count($product->activeVideos) > 0)
-                        @foreach ($product->activeVideos as $video)
-                            @if($video->status == 1)
-                                <div class="item">
-                                    <div class="mobile-embed embed-responsive embed-responsive-16by9">
-                                        {!! $video->embed_video !!}
-                                    </div>
-                                </div>
-                                @break
-                            @endif
-                        @endforeach
-                    @endif
                     @if(count($product->Gallery) > 0)
                         <div class="item">
                             <div class="shadow-md cursor-pointer hover:shadow-lg">
@@ -96,6 +84,18 @@
                                     <img src="{{$gallery->paths['original']}}" class="w-full h-[400px] object-cover rounded-lg">
                                 </div>
                             </div>
+                        @endforeach
+                    @endif
+                    @if(count($product->activeVideos) > 0)
+                        @foreach ($product->activeVideos as $video)
+                            @if($video->status == 1)
+                                <div class="item">
+                                    <div class="mobile-embed embed-responsive embed-responsive-16by9">
+                                        {!! $video->embed_video !!}
+                                    </div>
+                                </div>
+                                @break
+                            @endif
                         @endforeach
                     @endif
                 </div>
