@@ -165,9 +165,21 @@
     display: none;
 }
 
-#mobile {
-    display: block;
-    width: 400px;
+@media screen and (max-width: 768px) {
+    #mobile {
+        width: 100%;
+    }
+
+    #mobile .item img,
+    #mobile .item .mobile-embed {
+        width: 100%;
+        height: 300px;
+    }
+
+    .mobile-embed iframe {
+        width: 100%;
+        height: calc(100vw * 9 / 16); /* Maintain 16:9 aspect ratio */
+    }
 }
 
 /* For large screens */
