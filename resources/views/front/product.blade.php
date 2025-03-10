@@ -72,12 +72,12 @@
                     </div>
                 </div>
                 <div class="owl-carousel owl-theme" id="mobile">
-                    @if(count($product->Gallery) > 0)
-                        <div class="item">
-                            <div class="shadow-md cursor-pointer hover:shadow-lg">
-                                <img src="{{$product->img_paths['original']}}" class="w-full h-[400px] object-cover rounded-lg">
-                            </div>
+                    <div class="item">
+                        <div class="shadow-md cursor-pointer hover:shadow-lg">
+                            <img src="{{$product->img_paths['original']}}" class="w-full h-[400px] object-cover rounded-lg">
                         </div>
+                    </div>
+                    @if(count($product->Gallery) > 0)
                         @foreach ($product->Gallery as $gallery)
                             <div class="item">
                                 <div class="shadow-md cursor-pointer hover:shadow-lg">
