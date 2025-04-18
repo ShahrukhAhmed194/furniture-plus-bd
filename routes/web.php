@@ -68,11 +68,11 @@ Route::get('auth/{provider}/callback',[\App\Http\Controllers\User\SocialLoginCon
 
 
 // Test Routes
-Route::get('test',             [TestController::class, 'test'])->name('test');
-Route::get('imp/product',             [TestController::class, 'importProduct2'])->name('importProduct2');
-// Route::get('import',             [TestController::class, 'import'])->name('import');
-Route::get('config',             [TestController::class, 'config'])->name('config');
-Route::get('cache-clear', [TestController::class, 'cacheClear']);
-Route::get('cache-clear-admin', [TestController::class, 'cacheClearAdmin'])->name('cacheClearAdmin');
+Route::get('test',[TestController::class, 'test'])->name('test');
+Route::get('imp/product',[TestController::class, 'importProduct2'])->name('importProduct2');
+// Route::get('import',[TestController::class, 'import'])->name('import');
+Route::get('config',[TestController::class, 'config'])->name('config');
+Route::get('cache-clear',[TestController::class, 'cacheClear']);
+Route::get('cache-clear-admin',[TestController::class, 'cacheClearAdmin'])->name('cacheClearAdmin');
 
-Route::get('abc/sms/test',             [TestController::class, 'smsTest']);
+Route::get('abc/sms/test',[TestController::class, 'smsTest']);

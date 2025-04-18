@@ -44,10 +44,7 @@ class PageController extends Controller
             return Product::where('spacial_offer', 1)->active(12)->select('id', 'title', 'image_path', 'image', 'regular_price', 'sale_price', 'slug')->get();
         });
 
-        $sliders = cache()->remember('sliders', (60 * 60 * 24 * 90), function(){
-            return Slider::active()->get();
-        });
-
+        $sliders = Slider::active()->get();
         $home_blocks = Category::where('for', 'product')->where('home_block', 1)->orderBy('feature_position', 'ASC')->active()->paginate(5);
 
         return view('front.homepage', compact('products', 'categories', 'hot_deals', 'sliders', 'home_blocks'));
